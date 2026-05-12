@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint API
+        run: npm run lint -w api
+
+      - name: Lint Web
+        run: npm run lint -w web
+
+      - name: Unit & e2e tests (API)
+        run: npm test -w api && npm run test:e2e -w api
+
+      - name: Build API
+        run: npm run build -w api
+
+      - name: Build Web
+        run: npm run build -w web

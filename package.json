@@ -1,0 +1,35 @@
+{
+  "name": "leadflow-crm",
+  "version": "0.1.0",
+  "private": true,
+  "description": "LeadFlow CRM — enterprise-style lead & distributor management (Angular + NestJS)",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run start:dev -w api",
+    "start": "npm run start -w web",
+    "all": "concurrently -k -s first \"npm run dev\" \"wait-on tcp:3000 && npm run start\"",
+    "build": "npm run build -w api && npm run build -w web",
+    "lint": "npm run lint -w api && npm run lint -w web",
+    "format": "prettier --write \"**/*.{ts,html,scss,css,json,md}\" --ignore-path .prettierignore",
+    "prepare": "husky",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "wait-on": "^8.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.4.2"
+  },
+  "lint-staged": {
+    "*.{ts,html,scss,json,md}": [
+      "prettier --write"
+    ]
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

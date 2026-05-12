@@ -1,0 +1,48 @@
+<mat-toolbar color="primary" class="toolbar">
+  <mat-icon aria-hidden="true">hub</mat-icon>
+  <span class="toolbar__brand">{{ title() }}</span>
+  <span class="toolbar__spacer"></span>
+  <a mat-button href="/api/docs" target="_blank" rel="noopener"> API docs </a>
+  <span class="toolbar__chip" [attr.data-state]="apiStatus()">
+    @switch (apiStatus()) {
+      @case ('ok') {
+        <span>API online</span>
+      }
+      @case ('error') {
+        <span>API offline</span>
+      }
+      @default {
+        <span>Checking API…</span>
+      }
+    }
+  </span>
+</mat-toolbar>
+
+<main class="shell">
+  <section class="hero">
+    <mat-card class="hero__card" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>Lead &amp; distributor operations</mat-card-title>
+        <mat-card-subtitle>{{ subtitle() }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="hero__text">
+          Phase 1 ships the professional skeleton: Dockerized PostgreSQL and Redis, MinIO for
+          uploads, NestJS with Swagger and health checks, and Angular Material with signals on the
+          client.
+        </p>
+        <p class="hero__muted">
+          Next: JWT with refresh, RBAC (ADMIN · DISTRIBUTOR · EMPLOYEE), audit logs, and the lead
+          pipeline with tenant isolation for distributors.
+        </p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <a mat-raised-button color="primary" href="/api/docs" target="_blank" rel="noopener">
+          Open Swagger
+        </a>
+      </mat-card-actions>
+    </mat-card>
+  </section>
+
+  <router-outlet />
+</main>
