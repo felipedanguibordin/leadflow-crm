@@ -1,14 +1,20 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MatToolbarModule, MatButtonModule, MatCardModule, MatIconModule],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -17,10 +23,6 @@ export class AppComponent implements OnInit {
 
   readonly title = signal('LeadFlow CRM');
   readonly apiStatus = signal<'unknown' | 'ok' | 'error'>('unknown');
-
-  readonly subtitle = signal(
-    'Enterprise-ready lead management for distributors — Angular, NestJS, PostgreSQL, Redis.',
-  );
 
   ngOnInit() {
     this.http.get<{ name: string }>('/api/v1').subscribe({

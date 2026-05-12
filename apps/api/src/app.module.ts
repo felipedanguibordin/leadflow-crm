@@ -4,8 +4,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import configuration from './config/configuration';
+import { AnalyticsModule } from './analytics/analytics.module';
+import { FinanceModule } from './finance/finance.module';
 import { HealthModule } from './health/health.module';
+import { LeadsModule } from './leads/leads.module';
+import { OrganizationsModule } from './organizations/organizations.module';
 import { RedisModule } from './redis/redis.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -40,6 +45,11 @@ import { RedisModule } from './redis/redis.module';
     }),
     RedisModule,
     HealthModule,
+    OrganizationsModule,
+    FinanceModule,
+    LeadsModule,
+    UsersModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

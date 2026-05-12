@@ -28,7 +28,8 @@ describe('AppController (e2e)', () => {
       .get('/api/v1')
       .expect(200)
       .expect((res) => {
-        expect(res.body.name).toBe('LeadFlow CRM API');
+        const body = res.body as { name: string };
+        expect(body.name).toBe('LeadFlow CRM API');
       });
   });
 });

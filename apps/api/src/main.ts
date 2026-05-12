@@ -1,4 +1,4 @@
-import { ValidationPipe } from '@nestjs/common';
+import { createGlobalValidationPipe } from './common/validation/validation-pipe.options';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -7,14 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.setGlobalPrefix('api/v1');
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-      transformOptions: { enableImplicitConversion: true },
-    }),
-  );
+  app.useGlobalPipes(createGlobalValidationPipe());
 
   app.enableCors({
     origin: process.env.CORS_ORIGIN?.split(',').map((s) => s.trim()) ?? [
@@ -34,6 +27,11 @@ async function bootstrap() {
       'access-token',
     )
     .addTag('Health', 'Service and dependency health')
+    .addTag('Organizations', 'Tenant / distributor directory')
+    .addTag('Finance', 'Boletos, invoices, settlement')
+    .addTag('Leads', 'Lead pipeline (writes guarded by financial compliance)')
+    .addTag('Workspace users', 'Collaborators & activity for KPIs')
+    .addTag('Analytics', 'Dashboard metrics')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api/docs', app, document);

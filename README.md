@@ -49,36 +49,39 @@ Example after you have assets:
 
 ## Tech stack
 
-| Layer          | Choices                                                                                                      |
-| -------------- | ------------------------------------------------------------------------------------------------------------ |
-| Frontend       | Angular 19+, Angular Material, RxJS, Signals (`@angular/core`), optional Tailwind (not installed by default) |
-| Backend        | NestJS 11, TypeScript, JWT-ready (`@nestjs/jwt`, `@nestjs/passport`), Swagger, `class-validator` ready       |
-| Database       | PostgreSQL (TypeORM)                                                                                         |
-| Cache          | Redis                                                                                                        |
-| Object storage | MinIO (local S3-compatible)                                                                                  |
-| Tooling        | ESLint + Prettier, Husky + lint-staged, Docker Compose                                                       |
-| CI             | GitHub Actions (`/.github/workflows/ci.yml`)                                                                 |
+| Layer          | Choices                                                                                                |
+| -------------- | ------------------------------------------------------------------------------------------------------ |
+| Frontend       | Angular 19+, Angular Material, RxJS, Signals, **ng2-charts** + **Chart.js** (dashboard)                |
+| Backend        | NestJS 11, TypeScript, JWT-ready (`@nestjs/jwt`, `@nestjs/passport`), Swagger, `class-validator` ready |
+| Database       | PostgreSQL (TypeORM)                                                                                   |
+| Cache          | Redis                                                                                                  |
+| Object storage | MinIO (local S3-compatible)                                                                            |
+| Tooling        | ESLint + Prettier, Husky + lint-staged, Docker Compose                                                 |
+| CI             | GitHub Actions (`/.github/workflows/ci.yml`)                                                           |
 
 ## Features
 
-**Implemented (Phase 1 — base)**
+**Phase 1 — Base**
 
-- Monorepo with **npm workspaces** (`apps/api`, `apps/web`)
-- **Docker Compose**: Postgres, Redis, MinIO
-- NestJS: **Swagger**, **global validation pipe**, **CORS**, **health** endpoint (`/api/v1/health`)
-- Angular: **Material** shell, **signals**, API connectivity indicator, proxy to backend
-- **ESLint** + **Prettier** + **Husky** pre-commit formatting on staged files
-- **CI** workflow: install → lint → build (with Postgres & Redis services)
+- Monorepo **npm workspaces** (`apps/api`, `apps/web`), Docker Compose (Postgres, Redis, MinIO)
+- NestJS: Swagger (`/api/docs`), **centralized** `ValidationPipe` config, CORS, health checks
+- Angular shell with Material, proxy to API, Husky + lint-staged, GitHub Actions CI
 
-**Planned (Phases 2–3 — roadmap)**
+**Phases 4–5 — Enterprise slice (this repo)**
 
-- JWT access + refresh, **remember me**, session expiration UX, **roles** `ADMIN` · `DISTRIBUTOR` · `EMPLOYEE`
-- Guards & interceptors (backend + frontend), **audit logs**
-- Leads **CRUD**, pipeline status, notes, **history**, **attachments** (S3/MinIO)
-- **Tenant rule**: distributors see **only their leads**
-- **Filters**, pagination, debounced search, **CSV export**
-- **Delinquency / billing** rules to block inadimplentes (business rules + admin flags)
-- Dashboard **metrics** and (optional) realtime notifications
+- **Organizations** (tenants) and **workspace users** (activity / “active users” KPI)
+- **Finance**: boletos / invoices as `payables` (`BOLETO` \| `INVOICE`), **PENDING** → **PAID** settlement
+- **Delinquency**: pluggable **`DelinquencyPolicy`** + **`FinancialComplianceService`**; **`DelinquencyGuard`** blocks **POST/PATCH/DELETE** on leads while any payable is **PENDING**; reads (GET leads) stay allowed
+- **`DelinquencyContextMiddleware`** attaches a read-only snapshot on lead routes (`req.delinquency`) for auditing / future logging
+- **Leads** CRUD under `organizations/:organizationId/leads` (pipeline statuses: NEW → … → WON \| LOST)
+- **Analytics** `GET /api/v1/analytics/dashboard?organizationId=` — leads/month, conversion, finance counters, active users (30d)
+- **Dashboard** (`/dashboard`): KPI cards + line + doughnut charts (Chart.js)
+
+**Still roadmap (e.g. Phases 2–3)**
+
+- JWT + refresh, remember-me, RBAC guards on the client, audit log persistence
+- Lead notes/history/attachments to MinIO, CSV export, advanced filters
+- Realtime notifications
 
 ## Repository layout
 
@@ -151,6 +154,8 @@ npm run dev:web
 
 Open http://localhost:4200 — requests to `/api/*` are proxied to the API.
 
+The **Dashboard** needs at least one organization (create via `POST /api/v1/organizations` in Swagger or `curl`). Optionally add workspace users and ping activity: `POST …/workspace-users` and `POST …/workspace-users/:id/ping`.
+
 For automated tests, API e2e uses an **in-memory SQLite** database (`E2E_TEST=true` via Jest setup) so CI does not require Docker for Postgres. Local development still uses PostgreSQL from Compose.
 
 Interactive OpenAPI UI is served at **`/api/docs`** with Bearer auth placeholder for upcoming JWT.
@@ -172,11 +177,13 @@ A starter multi-stage `Dockerfile` lives in `apps/api/Dockerfile` (context = `ap
 
 ## Roadmap
 
-| Phase | Focus                                                      | Status                      |
-| ----- | ---------------------------------------------------------- | --------------------------- |
-| **1** | Monorepo, Docker, Swagger, health, Angular shell, CI, docs | **In progress / delivered** |
-| **2** | JWT, refresh, RBAC, users, audit logs, remember-me         | Planned                     |
-| **3** | Leads domain, pipeline, attachments, filters, CSV export   | Planned                     |
+| Phase | Focus                                                                | Status                 |
+| ----- | -------------------------------------------------------------------- | ---------------------- |
+| **1** | Monorepo, Docker, Swagger, health, Angular shell, CI, docs           | Delivered              |
+| **2** | JWT, refresh, RBAC, audit logs, remember-me                          | Planned                |
+| **3** | Lead notes/history, MinIO attachments, filters, CSV export           | Planned                |
+| **4** | Delinquency policy, compliance service, guard + middleware on writes | Delivered (core slice) |
+| **5** | Analytics API + dashboard charts (KPIs)                              | Delivered              |
 
 ---
 

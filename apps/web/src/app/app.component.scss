@@ -1,11 +1,11 @@
 .toolbar {
   position: sticky;
   top: 0;
-  z-index: 2;
+  z-index: 3;
 }
 
 .toolbar__brand {
-  margin-left: 0.5rem;
+  margin: 0 0.75rem 0 0.5rem;
   font-weight: 600;
   letter-spacing: 0.02em;
 }
@@ -31,28 +31,5 @@
 
 .shell {
   min-height: calc(100vh - 64px);
-  padding: 2rem clamp(1rem, 4vw, 3rem);
-  background:
-    radial-gradient(1200px 600px at 10% 0%, rgba(33, 150, 243, 0.12), transparent),
-    linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
-}
-
-.hero {
-  max-width: 880px;
-}
-
-.hero__card {
-  backdrop-filter: blur(6px);
-}
-
-.hero__text {
-  font-size: 1.05rem;
-  line-height: 1.6;
-  margin: 0 0 1rem;
-}
-
-.hero__muted {
-  color: rgba(0, 0, 0, 0.58);
-  line-height: 1.55;
-  margin: 0;
+  background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
 }

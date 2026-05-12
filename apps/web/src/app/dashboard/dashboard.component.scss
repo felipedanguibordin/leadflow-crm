@@ -1,0 +1,75 @@
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.title {
+  margin-left: 0.5rem;
+  font-weight: 600;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.org-field {
+  width: min(320px, 45vw);
+  margin: 0.5rem 0.75rem 0 0;
+}
+
+.page {
+  padding: 1.25rem clamp(0.75rem, 3vw, 2rem) 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.banner {
+  margin-bottom: 1rem;
+  border-color: #c62828 !important;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.kpi-value {
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.muted {
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  align-items: stretch;
+}
+
+.chart-card {
+  min-height: 320px;
+}
+
+.chart-wrap {
+  height: 260px;
+  position: relative;
+}
+
+.chart-wrap.doughnut {
+  max-width: 360px;
+  margin: 0 auto;
+}
