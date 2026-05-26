@@ -18,13 +18,15 @@ import { RouterLink } from '@angular/router';
         </mat-card-header>
         <mat-card-content>
           <p>
-            Use the <strong>Dashboard</strong> for KPIs (leads/month, conversion, delinquency,
-            active users). Writes to the lead pipeline are blocked automatically when the tenant has
+            Manage your <strong>Leads</strong> pipeline (create, edit status, delete) or use the
+            <strong>Dashboard</strong> for KPIs (leads/month, conversion, delinquency, active
+            users). Writes to the lead pipeline are blocked automatically when the tenant has
             pending boletos until finance settles them.
           </p>
         </mat-card-content>
         <mat-card-actions align="end">
-          <a mat-raised-button color="primary" routerLink="/dashboard">Open dashboard</a>
+          <a mat-raised-button color="primary" routerLink="/leads">Manage leads</a>
+          <a mat-stroked-button routerLink="/dashboard">Dashboard</a>
         </mat-card-actions>
       </mat-card>
     </section>

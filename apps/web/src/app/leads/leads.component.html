@@ -1,0 +1,110 @@
+<mat-toolbar color="primary" class="bar">
+  <mat-icon>group_work</mat-icon>
+  <span class="title">Leads pipeline</span>
+  <span class="spacer"></span>
+  @if (organizations().length) {
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="org-field">
+      <mat-label>Organization</mat-label>
+      <mat-select [value]="selectedOrgId()" (selectionChange)="onOrgChange($event.value)">
+        @for (o of organizations(); track o.id) {
+          <mat-option [value]="o.id">{{ o.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  }
+  <button mat-icon-button type="button" (click)="refresh()" aria-label="Refresh">
+    <mat-icon>refresh</mat-icon>
+  </button>
+</mat-toolbar>
+
+<div class="page">
+  @if (error()) {
+    <mat-card class="banner" appearance="outlined">
+      <mat-card-content>{{ error() }}</mat-card-content>
+    </mat-card>
+  }
+
+  @if (loading()) {
+    <div class="center">
+      <mat-progress-spinner diameter="48" mode="indeterminate" />
+    </div>
+  } @else if (!organizations().length) {
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>No organizations yet</mat-card-title>
+        <mat-card-subtitle>Create one via the API to start managing leads.</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <code>POST /api/v1/organizations</code> with
+        <code>&#123; "name": "My distributor" &#125;</code>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <div class="actions-row">
+      <button mat-raised-button color="primary" (click)="openCreate()">
+        <mat-icon>add</mat-icon>
+        New lead
+      </button>
+      <span class="count">{{ leads().length }} lead(s)</span>
+    </div>
+
+    @if (!leads().length) {
+      <mat-card appearance="outlined" class="empty-card">
+        <mat-card-content>
+          No leads yet for this organization. Click <strong>New lead</strong> to get started.
+        </mat-card-content>
+      </mat-card>
+    } @else {
+      <div class="table-container mat-elevation-z1">
+        <table mat-table [dataSource]="leads()">
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef>Title</th>
+            <td mat-cell *matCellDef="let lead">{{ lead.title }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let lead">
+              <span class="status-chip" [attr.data-status]="lead.status">
+                {{ lead.status }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef>Created</th>
+            <td mat-cell *matCellDef="let lead">
+              {{ lead.createdAt | date: 'mediumDate' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let lead">
+              <button
+                mat-icon-button
+                (click)="openEdit(lead)"
+                aria-label="Edit lead"
+                matTooltip="Edit"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="confirmDelete(lead)"
+                aria-label="Delete lead"
+                matTooltip="Delete"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    }
+  }
+</div>

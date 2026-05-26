@@ -1,0 +1,97 @@
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.title {
+  margin-left: 0.5rem;
+  font-weight: 600;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.org-field {
+  width: min(320px, 45vw);
+  margin: 0.5rem 0.75rem 0 0;
+}
+
+.page {
+  padding: 1.25rem clamp(0.75rem, 3vw, 2rem) 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.banner {
+  margin-bottom: 1rem;
+  border-color: #c62828 !important;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.actions-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.count {
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.empty-card {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.table-container {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+}
+
+.status-chip {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.status-chip[data-status='NEW'] {
+  background: rgba(25, 118, 210, 0.12);
+  color: #1565c0;
+}
+
+.status-chip[data-status='CONTACTED'] {
+  background: rgba(245, 124, 0, 0.12);
+  color: #e65100;
+}
+
+.status-chip[data-status='QUALIFIED'] {
+  background: rgba(156, 39, 176, 0.12);
+  color: #7b1fa2;
+}
+
+.status-chip[data-status='WON'] {
+  background: rgba(46, 125, 50, 0.15);
+  color: #2e7d32;
+}
+
+.status-chip[data-status='LOST'] {
+  background: rgba(198, 40, 40, 0.12);
+  color: #c62828;
+}
