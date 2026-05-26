@@ -29,16 +29,16 @@ Example after you have assets:
 
 ```text
 ┌──────────────┐     HTTPS / REST      ┌──────────────┐
-│   Angular    │ ◄──────────────────► │    NestJS    │
-│  (Material)  │      JWT (soon)     │  Swagger UI  │
+│   Angular    │ ◄──────────────────►  │    NestJS    │
+│  (Material)  │      JWT (soon)       │  Swagger UI  │
 └──────────────┘                       └──────┬───────┘
-                                            │
-                    ┌───────────────────────┼────────────────────────┐
-                    ▼                       ▼                        ▼
-            ┌──────────────┐        ┌──────────────┐         ┌──────────────┐
-            │ PostgreSQL   │        │    Redis     │         │ MinIO (S3)  │
-            │   (leads)    │        │   (cache)    │         │  (uploads)  │
-            └──────────────┘        └──────────────┘         └──────────────┘
+                                              │
+                      ┌───────────────────────┼────────────────────────┐
+                      ▼                       ▼                        ▼
+              ┌──────────────┐        ┌──────────────┐         ┌──────────────┐
+              │ PostgreSQL   │        │    Redis     │         │ MinIO (S3)  │
+              │   (leads)    │        │   (cache)    │         │  (uploads)  │
+              └──────────────┘        └──────────────┘         └──────────────┘
 ```
 
 **Angular (apps/web)** — SPA with Angular Material, standalone components, RxJS, and **signals** for shell state. Dev server proxies `/api` to the backend.
@@ -51,7 +51,7 @@ Example after you have assets:
 
 | Layer          | Choices                                                                                                |
 | -------------- | ------------------------------------------------------------------------------------------------------ |
-| Frontend       | Angular 19+, Angular Material, RxJS, Signals, **ng2-charts** + **Chart.js** (dashboard)                |
+| Frontend       | Angular 19+, Angular Material, RxJS, Signals,**ng2-charts** + **Chart.js** (dashboard)                 |
 | Backend        | NestJS 11, TypeScript, JWT-ready (`@nestjs/jwt`, `@nestjs/passport`), Swagger, `class-validator` ready |
 | Database       | PostgreSQL (TypeORM)                                                                                   |
 | Cache          | Redis                                                                                                  |

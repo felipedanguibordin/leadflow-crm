@@ -11,6 +11,9 @@ import { LeadsModule } from './leads/leads.module';
 import { OrganizationsModule } from './organizations/organizations.module';
 import { RedisModule } from './redis/redis.module';
 import { UsersModule } from './users/users.module';
+import { QueuesModule } from './queues/queues.module';
+import { EmailModule } from './email/email.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -44,6 +47,9 @@ import { UsersModule } from './users/users.module';
       },
     }),
     RedisModule,
+    QueuesModule,
+    EmailModule,
+    NotificationsModule,
     HealthModule,
     OrganizationsModule,
     FinanceModule,

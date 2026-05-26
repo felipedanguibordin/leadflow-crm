@@ -17,6 +17,16 @@ export default () => ({
   },
   redis: {
     url: process.env.REDIS_URL ?? 'redis://localhost:6379',
+    host: process.env.REDIS_HOST ?? 'localhost',
+    port: parseInt(process.env.REDIS_PORT ?? '6379', 10),
+  },
+  email: {
+    host: process.env.EMAIL_HOST ?? 'smtp.ethereal.email',
+    port: parseInt(process.env.EMAIL_PORT ?? '587', 10),
+    user: process.env.EMAIL_USER ?? '',
+    pass: process.env.EMAIL_PASS ?? '',
+    from: process.env.EMAIL_FROM ?? 'noreply@leadflow.local',
+    secure: process.env.EMAIL_SECURE === 'true',
   },
   storage: {
     endpoint: process.env.S3_ENDPOINT ?? 'http://localhost:9000',

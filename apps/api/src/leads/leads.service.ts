@@ -1,7 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { InjectQueue } from '@nestjs/bull';
+import type { Queue } from 'bull';
 import { Repository } from 'typeorm';
 import { OrganizationsService } from '../organizations/organizations.service';
+import { NotificationsService } from '../notifications/notifications.service';
+import { NotificationEventDto } from '../notifications/dto/notification-event.dto';
 import type { CreateLeadDto } from './dto/create-lead.dto';
 import type { UpdateLeadDto } from './dto/update-lead.dto';
 import { Lead } from './entities/lead.entity';
@@ -13,7 +17,12 @@ export class LeadsService {
   constructor(
     @InjectRepository(Lead)
     private readonly repo: Repository<Lead>,
+    @InjectQueue('emails')
+    private readonly emailQueue: Queue,
+    @InjectQueue('notifications')
+    private readonly notificationQueue: Queue,
     private readonly organizations: OrganizationsService,
+    private readonly notifications: NotificationsService,
   ) {}
 
   async list(organizationId: string): Promise<Lead[]> {
@@ -33,7 +42,40 @@ export class LeadsService {
       status,
       closedAt: TERMINAL.has(status) ? new Date() : null,
     });
-    return this.repo.save(row);
+    const saved = await this.repo.save(row);
+
+    // Enqueue email notification
+    await this.emailQueue.add(
+      'lead-created',
+      {
+        organizationId,
+        leadId: saved.id,
+        title: saved.title,
+        to: 'team@example.com', // TODO: Get from org settings
+      },
+      {
+        attempts: 3,
+        backoff: {
+          type: 'exponential',
+          delay: 2000,
+        },
+      },
+    );
+
+    // Emit real-time notification via WebSocket
+    const notification = new NotificationEventDto(
+      'lead:created',
+      organizationId,
+      {
+        leadId: saved.id,
+        title: saved.title,
+        status: saved.status,
+        createdAt: saved.createdAt,
+      },
+    );
+    this.notifications.broadcastToOrganization(organizationId, notification);
+
+    return saved;
   }
 
   async update(

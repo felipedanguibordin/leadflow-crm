@@ -30,6 +30,6 @@ export class Lead {
   @CreateDateColumn()
   createdAt!: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   closedAt!: Date | null;
 }
